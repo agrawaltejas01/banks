@@ -4,6 +4,7 @@ import (
 	"log"
 	"os"
 
+	transaction_model "github.com/agrawaltejas01/banks/internal/wallet/transaction/model"
 	user_model "github.com/agrawaltejas01/banks/internal/wallet/user/model"
 	wallet_model "github.com/agrawaltejas01/banks/internal/wallet/wallet/model"
 	"gorm.io/driver/mysql"
@@ -31,5 +32,10 @@ func AutoMigrate(db *gorm.DB) {
 	err = db.AutoMigrate(&user_model.User{})
 	if err != nil {
 		log.Fatalf("AutoMigrate failed for user: %v", err)
+	}
+
+	err = db.AutoMigrate(&transaction_model.Transaction{})
+	if err != nil {
+		log.Fatalf("AutoMigrate failed for transaction: %v", err)
 	}
 }
