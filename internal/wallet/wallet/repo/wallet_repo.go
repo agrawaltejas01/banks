@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/agrawaltejas01/banks/internal/database"
+	transaction_model "github.com/agrawaltejas01/banks/internal/wallet/transaction/model"
 	wallet_model "github.com/agrawaltejas01/banks/internal/wallet/wallet/model"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
@@ -33,13 +34,21 @@ func (r *WalletRepo) GetById(ctx context.Context, id string) (*wallet_model.Wall
 	return &wallet, err
 }
 
-func (r *WalletRepo) UpdateWalletBalance(ctx context.Context, id string, funds int) error {
+func (r *WalletRepo) UpdateWalletBalance(ctx context.Context, id string,
+	funds int, amount int, tType transaction_model.TransactionType) error {
 
 	db := database.GetDbInstanceFromContextOrDB(ctx)
 	fmt.Print(db)
 
+	if tType == transaction_model.Credit {
+		return db.Model(&wallet_model.Wallet{}).
+			Where("id = ?", id).
+			Update("funds", gorm.Expr("funds + ?", amount)).
+			Error
+	}
 	return db.Model(&wallet_model.Wallet{}).
-		Where("id = ?", id).
-		UpdateColumn("funds", funds).
+		Where("id = ? AND funds >= ?", id, funds).
+		Update("funds", gorm.Expr("funds - ?", amount)).
 		Error
+
 }

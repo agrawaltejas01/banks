@@ -46,11 +46,7 @@ func (s *WalletService) UpdateWalletBalance(ctx context.Context, id string, amou
 		if wallet.Funds < amount {
 			return nil, errors.New("insufficient balance")
 		}
-		wallet.Funds -= amount
-	}
-	if tType == transaction_model.Credit {
-		wallet.Funds += amount
 	}
 
-	return wallet, s.repo.UpdateWalletBalance(ctx, id, wallet.Funds)
+	return wallet, s.repo.UpdateWalletBalance(ctx, id, wallet.Funds, amount, tType)
 }
