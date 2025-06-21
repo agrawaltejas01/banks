@@ -6,6 +6,9 @@ import (
 
 	"github.com/agrawaltejas01/banks/internal/database"
 	"github.com/agrawaltejas01/banks/internal/server"
+	user_controller "github.com/agrawaltejas01/banks/internal/wallet/user/controller"
+	user_repo "github.com/agrawaltejas01/banks/internal/wallet/user/repo"
+	user_service "github.com/agrawaltejas01/banks/internal/wallet/user/service"
 	wallet_controller "github.com/agrawaltejas01/banks/internal/wallet/wallet/controller"
 	wallet_repo "github.com/agrawaltejas01/banks/internal/wallet/wallet/repo"
 	wallet_service "github.com/agrawaltejas01/banks/internal/wallet/wallet/service"
@@ -24,8 +27,12 @@ func main() {
 	walletService := wallet_service.NewWalletService(walletRepo)
 	walletController := wallet_controller.NewWalletController(walletService)
 
+	userRepo := user_repo.NewUserRepo(db)
+	userService := user_service.NewUserService(userRepo)
+	userController := user_controller.NewUserController(userService)
+
 	r := gin.Default()
-	server.InitRoutes(r, walletController)
+	server.InitRoutes(r, walletController, userController)
 
 	port := os.Getenv("PORT")
 	if port == "" {
