@@ -1,6 +1,9 @@
 package wallet_service
 
 import (
+	"errors"
+
+	transaction_model "github.com/agrawaltejas01/banks/internal/wallet/transaction/model"
 	user_interfaces "github.com/agrawaltejas01/banks/internal/wallet/user/interfaces"
 	wallet_interfaces "github.com/agrawaltejas01/banks/internal/wallet/wallet/interfaces"
 	wallet_model "github.com/agrawaltejas01/banks/internal/wallet/wallet/model"
@@ -29,4 +32,24 @@ func (s *WalletService) CreateWallet(userId string) (*wallet_model.Wallet, error
 
 func (s *WalletService) GetWalletById(id string) (*wallet_model.Wallet, error) {
 	return s.repo.GetById(id)
+}
+
+func (s *WalletService) UpdateWalletBalance(id string, amount int,
+	tType transaction_model.TransactionType) (*wallet_model.Wallet, error) {
+	wallet, err := s.repo.GetById(id)
+	if err != nil {
+		return nil, err
+	}
+
+	if tType == transaction_model.Debit {
+		if wallet.Funds < amount {
+			return nil, errors.New("insufficient balance")
+		}
+		wallet.Funds -= amount
+	}
+	if tType == transaction_model.Credit {
+		wallet.Funds += amount
+	}
+
+	return wallet, s.repo.UpdateWalletBalance(id, wallet.Funds)
 }

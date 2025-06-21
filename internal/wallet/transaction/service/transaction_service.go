@@ -18,9 +18,21 @@ func NewTransactionService(repo transaction_interfaces.TransactionRepo, walletSe
 }
 
 func (s *TransactionService) CreateTransaction(amount int, tType transaction_model.TransactionType, walletId string) (*transaction_model.Transaction, error) {
+
+	// Update wallet balance
+	_, err := s.walletService.UpdateWalletBalance(walletId, amount, tType)
+	if err != nil {
+		return nil, err
+	}
+
+	// Within same transaction create transaction and update wallet balance
 	tx := transaction_model.NewTransaction(amount, tType, walletId)
-	err := s.repo.Create(tx)
-	return tx, err
+	err = s.repo.Create(tx)
+	if err != nil {
+		return nil, err
+	}
+
+	return tx, nil
 }
 
 func (s *TransactionService) GetTransactionById(id string) (*transaction_model.Transaction, error) {

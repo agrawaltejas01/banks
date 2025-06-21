@@ -22,3 +22,10 @@ func (r *WalletRepo) GetById(id string) (*wallet_model.Wallet, error) {
 	err := r.db.First(&wallet, "id = ?", id).Error
 	return &wallet, err
 }
+
+func (r *WalletRepo) UpdateWalletBalance(id string, funds int) error {
+	return r.db.Model(&wallet_model.Wallet{}).
+		Where("id = ?", id).
+		UpdateColumn("funds", funds).
+		Error
+}
