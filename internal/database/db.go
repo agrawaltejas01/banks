@@ -1,0 +1,29 @@
+package database
+
+import (
+	"log"
+	"os"
+
+	wallet_model "github.com/agrawaltejas01/banks/internal/wallet/wallet/model"
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
+)
+
+func InitDB() *gorm.DB {
+	dsn := os.Getenv("MYSQL_DSN")
+	if dsn == "" {
+		log.Fatal("MYSQL_DSN not set in environment")
+	}
+	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
+	if err != nil {
+		log.Fatalf("failed to connect database: %v", err)
+	}
+	return db
+}
+
+func AutoMigrate(db *gorm.DB) {
+	err := db.AutoMigrate(&wallet_model.Wallet{})
+	if err != nil {
+		log.Fatalf("AutoMigrate failed: %v", err)
+	}
+}
