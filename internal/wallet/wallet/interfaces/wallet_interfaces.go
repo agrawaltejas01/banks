@@ -9,13 +9,13 @@ import (
 
 type WalletRepo interface {
 	Create(wallet *wallet_model.Wallet) error
-	GetById(id string) (*wallet_model.Wallet, error)
+	GetById(ctx context.Context, id string) (*wallet_model.Wallet, error)
 	UpdateWalletBalance(ctx context.Context, id string, newFunds int) error
 }
 
 type WalletService interface {
 	CreateWallet(userId string) (*wallet_model.Wallet, error)
-	GetWalletById(id string) (*wallet_model.Wallet, error)
+	GetWalletById(ctx context.Context, id string) (*wallet_model.Wallet, error)
 	UpdateWalletBalance(ctx context.Context, id string, amount int, tType transaction_model.TransactionType) (*wallet_model.Wallet, error)
 }
 

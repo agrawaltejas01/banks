@@ -31,13 +31,13 @@ func (s *WalletService) CreateWallet(userId string) (*wallet_model.Wallet, error
 	return wallet, err
 }
 
-func (s *WalletService) GetWalletById(id string) (*wallet_model.Wallet, error) {
-	return s.repo.GetById(id)
+func (s *WalletService) GetWalletById(ctx context.Context, id string) (*wallet_model.Wallet, error) {
+	return s.repo.GetById(ctx, id)
 }
 
 func (s *WalletService) UpdateWalletBalance(ctx context.Context, id string, amount int,
 	tType transaction_model.TransactionType) (*wallet_model.Wallet, error) {
-	wallet, err := s.repo.GetById(id)
+	wallet, err := s.repo.GetById(ctx, id)
 	if err != nil {
 		return nil, err
 	}

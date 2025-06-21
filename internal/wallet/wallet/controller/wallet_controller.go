@@ -33,7 +33,7 @@ func (c *WalletController) CreateWallet(ctx *gin.Context) {
 
 func (c *WalletController) GetWalletById(ctx *gin.Context) {
 	id := ctx.Param("id")
-	wallet, err := c.service.GetWalletById(id)
+	wallet, err := c.service.GetWalletById(ctx, id)
 	if err != nil {
 		ctx.JSON(http.StatusNotFound, gin.H{"error": "Wallet not found"})
 		return

@@ -7,6 +7,7 @@ import (
 	"github.com/agrawaltejas01/banks/internal/database"
 	wallet_model "github.com/agrawaltejas01/banks/internal/wallet/wallet/model"
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 )
 
 type WalletRepo struct {
@@ -21,9 +22,14 @@ func (r *WalletRepo) Create(wallet *wallet_model.Wallet) error {
 	return r.db.Create(wallet).Error
 }
 
-func (r *WalletRepo) GetById(id string) (*wallet_model.Wallet, error) {
+func (r *WalletRepo) GetById(ctx context.Context, id string) (*wallet_model.Wallet, error) {
 	var wallet wallet_model.Wallet
-	err := r.db.First(&wallet, "id = ?", id).Error
+
+	db := database.GetDbInstanceFromContextOrDB(ctx)
+
+	err := db.
+		Clauses(clause.Locking{Strength: clause.LockingStrengthUpdate}).
+		First(&wallet, "id = ?", id).Error
 	return &wallet, err
 }
 
