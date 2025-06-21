@@ -11,6 +11,8 @@ import (
 	"gorm.io/gorm"
 )
 
+var DB *gorm.DB
+
 func InitDB() *gorm.DB {
 	dsn := os.Getenv("MYSQL_DSN")
 	if dsn == "" {
@@ -20,6 +22,8 @@ func InitDB() *gorm.DB {
 	if err != nil {
 		log.Fatalf("failed to connect database: %v", err)
 	}
+
+	DB = db
 	return db
 }
 

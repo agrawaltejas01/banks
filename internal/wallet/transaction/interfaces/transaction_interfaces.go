@@ -1,14 +1,19 @@
 package transaction_interfaces
 
-import transaction_model "github.com/agrawaltejas01/banks/internal/wallet/transaction/model"
+import (
+	"context"
+
+	transaction_model "github.com/agrawaltejas01/banks/internal/wallet/transaction/model"
+)
 
 type TransactionRepo interface {
-	Create(tx *transaction_model.Transaction) error
+	Create(ctx context.Context, tx *transaction_model.Transaction) error
 	GetById(id string) (*transaction_model.Transaction, error)
 }
 
 type TransactionService interface {
-	CreateTransaction(amount int, tType transaction_model.TransactionType, walletId string) (*transaction_model.Transaction, error)
+	CreateTransaction(ctx context.Context,
+		amount int, tType transaction_model.TransactionType, walletId string) (*transaction_model.Transaction, error)
 	GetTransactionById(id string) (*transaction_model.Transaction, error)
 }
 

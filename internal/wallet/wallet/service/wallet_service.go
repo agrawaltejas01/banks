@@ -1,6 +1,7 @@
 package wallet_service
 
 import (
+	"context"
 	"errors"
 
 	transaction_model "github.com/agrawaltejas01/banks/internal/wallet/transaction/model"
@@ -34,7 +35,7 @@ func (s *WalletService) GetWalletById(id string) (*wallet_model.Wallet, error) {
 	return s.repo.GetById(id)
 }
 
-func (s *WalletService) UpdateWalletBalance(id string, amount int,
+func (s *WalletService) UpdateWalletBalance(ctx context.Context, id string, amount int,
 	tType transaction_model.TransactionType) (*wallet_model.Wallet, error) {
 	wallet, err := s.repo.GetById(id)
 	if err != nil {
@@ -51,5 +52,5 @@ func (s *WalletService) UpdateWalletBalance(id string, amount int,
 		wallet.Funds += amount
 	}
 
-	return wallet, s.repo.UpdateWalletBalance(id, wallet.Funds)
+	return wallet, s.repo.UpdateWalletBalance(ctx, id, wallet.Funds)
 }

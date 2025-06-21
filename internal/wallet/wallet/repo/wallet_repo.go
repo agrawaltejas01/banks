@@ -1,6 +1,10 @@
 package wallet_repo
 
 import (
+	"context"
+	"fmt"
+
+	"github.com/agrawaltejas01/banks/internal/database"
 	wallet_model "github.com/agrawaltejas01/banks/internal/wallet/wallet/model"
 	"gorm.io/gorm"
 )
@@ -23,8 +27,12 @@ func (r *WalletRepo) GetById(id string) (*wallet_model.Wallet, error) {
 	return &wallet, err
 }
 
-func (r *WalletRepo) UpdateWalletBalance(id string, funds int) error {
-	return r.db.Model(&wallet_model.Wallet{}).
+func (r *WalletRepo) UpdateWalletBalance(ctx context.Context, id string, funds int) error {
+
+	db := database.GetDbInstanceFromContextOrDB(ctx)
+	fmt.Print(db)
+
+	return db.Model(&wallet_model.Wallet{}).
 		Where("id = ?", id).
 		UpdateColumn("funds", funds).
 		Error

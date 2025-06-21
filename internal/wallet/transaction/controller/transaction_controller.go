@@ -26,7 +26,7 @@ func (c *TransactionController) CreateTransaction(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	tx, err := c.service.CreateTransaction(req.Amount, transaction_model.TransactionType(req.Type), req.WalletId)
+	tx, err := c.service.CreateTransaction(ctx, req.Amount, transaction_model.TransactionType(req.Type), req.WalletId)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

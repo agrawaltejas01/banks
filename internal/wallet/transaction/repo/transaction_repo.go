@@ -1,6 +1,9 @@
 package transaction_repo
 
 import (
+	"context"
+
+	"github.com/agrawaltejas01/banks/internal/database"
 	transaction_model "github.com/agrawaltejas01/banks/internal/wallet/transaction/model"
 	"gorm.io/gorm"
 )
@@ -13,8 +16,9 @@ func NewTransactionRepo(db *gorm.DB) *TransactionRepo {
 	return &TransactionRepo{db: db}
 }
 
-func (r *TransactionRepo) Create(tx *transaction_model.Transaction) error {
-	return r.db.Create(tx).Error
+func (r *TransactionRepo) Create(ctx context.Context, tx *transaction_model.Transaction) error {
+	db := database.GetDbInstanceFromContextOrDB(ctx)
+	return db.Create(tx).Error
 }
 
 func (r *TransactionRepo) GetById(id string) (*transaction_model.Transaction, error) {
