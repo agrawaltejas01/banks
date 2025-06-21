@@ -10,7 +10,7 @@ import (
 type WalletRepo interface {
 	Create(wallet *wallet_model.Wallet) error
 	GetById(ctx context.Context, id string) (*wallet_model.Wallet, error)
-	UpdateWalletBalance(ctx context.Context, id string, funds int, amount int,
+	UpdateWalletBalance(ctx context.Context, id string, amount int,
 		tType transaction_model.TransactionType) error
 }
 

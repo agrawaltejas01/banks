@@ -35,7 +35,7 @@ func (r *WalletRepo) GetById(ctx context.Context, id string) (*wallet_model.Wall
 }
 
 func (r *WalletRepo) UpdateWalletBalance(ctx context.Context, id string,
-	funds int, amount int, tType transaction_model.TransactionType) error {
+	amount int, tType transaction_model.TransactionType) error {
 
 	db := database.GetDbInstanceFromContextOrDB(ctx)
 	fmt.Print(db)
@@ -47,7 +47,7 @@ func (r *WalletRepo) UpdateWalletBalance(ctx context.Context, id string,
 			Error
 	}
 	return db.Model(&wallet_model.Wallet{}).
-		Where("id = ? AND funds >= ?", id, funds).
+		Where("id = ? AND funds >= ?", id, amount).
 		Update("funds", gorm.Expr("funds - ?", amount)).
 		Error
 

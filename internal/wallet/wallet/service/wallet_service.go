@@ -48,5 +48,5 @@ func (s *WalletService) UpdateWalletBalance(ctx context.Context, id string, amou
 		}
 	}
 
-	return wallet, s.repo.UpdateWalletBalance(ctx, id, wallet.Funds, amount, tType)
+	return wallet, s.repo.UpdateWalletBalance(ctx, id, amount, tType)
 }
